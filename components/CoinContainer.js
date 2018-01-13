@@ -18,10 +18,10 @@ import EditModal from "./EditModal";
 import Modal from "react-native-modal";
 import store from "react-native-simple-store";
 import { saveAddedCoin, deleteCoin } from "./../Utils/Utils.js";
-import { bittrexAPI, binanceAPI } from "./../Utils/ApiUtils.js";
+import { bittrexAPI, binanceAPI, kucoinAPI } from "./../Utils/ApiUtils.js";
 const CryptoJS = require("crypto-js");
 
-const exchanges = ["bittrex", "binance"];
+const exchanges = ["bittrex", "binance", "kucoin"];
 
 class CoinContainer extends Component {
   constructor(props) {
@@ -42,7 +42,8 @@ class CoinContainer extends Component {
       },
       coinFunctions: {
         bittrex: bittrexAPI,
-        binance: binanceAPI
+        binance: binanceAPI,
+        kucoin: kucoinAPI
       }
     };
   }

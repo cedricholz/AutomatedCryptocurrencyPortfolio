@@ -15,6 +15,9 @@ import {
   AsyncStorage
 } from "react-native";
 import { saveSecrets } from "./../Utils/Utils.js";
+import ExchangeButton from "./ExchangeButton";
+
+const exchanges = ['bittrex', 'binance'];
 
 class AddModal extends React.Component {
   constructor(props) {
@@ -23,87 +26,58 @@ class AddModal extends React.Component {
     this.state = {
       isModalVisible: false,
       isAddCoinVisible: false,
-      isBinanceVisible: false,
-      isBittrexVisible: false,
-      binanceAPIKey: "",
-      binanceSecret: "",
-      bittrexAPIKey: "",
-      bittrexSecret: "",
       coinBought: "",
-      coinAmountBought: 0
+      coinAmountBought: 0,
+      binance : false,
+      bittrex : false
     };
   }
 
-  _saveBinance = () => {
-    const { binanceAPIKey, binanceSecret } = this.state;
-    if (binanceAPIKey.length > 0 && binanceSecret.length > 0) {
-      saveSecrets("binance", binanceAPIKey, binanceSecret, this.props.refreshCoins);
+  _whichExchange = (exchangeName) =>{
+    for(var i in exchanges){
 
+      if (exchanges[i] == exchangeName){
+        this.setState({
+          [exchanges[i]]: true
+        });
+      }
+      else{
+        this.setState({
+          [exchanges[i]]: false
+        });
+      }
+
+    }
+    console.log(exchangeName)
+  };
+
+  _saveNewCoin = () => {
+    const { coinBought, coinAmountBought } = this.state;
+
+    if (coinBought.length > 0 && coinAmountBought > 0) {
+      this.props.addCoin(coinBought, coinAmountBought);
       this.setState({
-        isBinanceVisible: false
+        isAddCoinVisible: false
       });
     }
   };
-
-  _saveBittrex = () => {
-    const { bittrexAPIKey, bittrexSecret } = this.state;
-
-    if (bittrexAPIKey.length > 0 && bittrexSecret.length > 0) {
-      saveSecrets("bittrex", bittrexAPIKey, bittrexSecret, this.props.refreshCoins);
-
-      this.setState({
-        isBittrexVisible: false
-      });
-    }
-  };
-
-
-_saveNewCoin = () => {
-  const { coinBought, coinAmountBought } = this.state;
-
-  if (coinBought.length > 0 && coinAmountBought > 0){
-    this.props.addCoin(coinBought, coinAmountBought);
-    this.setState({
-      isAddCoinVisible:false
-    })
-  }
-};
-
 
   getAutocompleteCoin = coin => {
     this.setState({
-      coinBought:coin
-    })
+      coinBought: coin
+    });
   };
 
   _openAddCoin = () =>
     this.setState({
       isAddCoinVisible: true,
-      isBittrexVisible: false,
-      isBinanceVisible: false
-    });
-
-  _openBinance = () =>
-    this.setState({
-      isAddCoinVisible: false,
-      isBittrexVisible: false,
-      isBinanceVisible: true
-    });
-
-  _openBittrex = () =>
-    this.setState({
-      isAddCoinVisible: false,
-      isBittrexVisible: true,
-      isBinanceVisible: false
     });
 
   _showModal = () => this.setState({ isModalVisible: true });
 
   _hideModal = () =>
     this.setState({
-      isModalVisible: false,
-      isBinanceVisible: false,
-      isBittrexVisible: false
+      isModalVisible: false
     });
 
   render() {
@@ -120,11 +94,7 @@ _saveNewCoin = () => {
     return (
       <View>
         <View style={buttonContainer}>
-          <Button
-            onPress={this._showModal}
-            title="  +  "
-            color="#841584"
-          />
+          <Button onPress={this._showModal} title="  +  " color="#841584" />
         </View>
         <TouchableWithoutFeedback onPress={this._hideModal.bind(this)}>
           <Modal
@@ -134,6 +104,7 @@ _saveNewCoin = () => {
             <TouchableWithoutFeedback onPress={() => {}}>
               <View style={styles.modalContainer}>
                 <ScrollView style={styles.modalScrollView}>
+                  {/* ADD COIN */}
                   <View style={styles.modalChoice}>
                     <Button
                       title="Add Coin"
@@ -141,98 +112,53 @@ _saveNewCoin = () => {
                       onPress={this._openAddCoin}
                     />
                     {this.state.isAddCoinVisible && (
-                      <View style={styles.addInfoBox}>
-                        <Text style={styles.keyText}>COIN</Text>
-                        <CoinAutocomplete
-                          coinDict={this.props.coinDict}
-                          getCoin={this.getAutocompleteCoin}
-                        />
-                        <Text style={styles.keyText}>AMOUNT BOUGHT</Text>
-                        <TextInput
-                          style={styles.amountBoughtText}
-                          keyboardType='numeric'
-                          maxLength={20}
-                          onChangeText={coinAmountBought =>
-                            this.setState({ coinAmountBought })
-                          }
+                      <View>
+                        <View style={styles.addInfoBox}>
+                          <Text style={styles.keyText}>COIN</Text>
+                          <CoinAutocomplete
+                            coinDict={this.props.coinDict}
+                            getCoin={this.getAutocompleteCoin}
+                          />
+                          <Text style={styles.keyText}>AMOUNT BOUGHT</Text>
+                          <TextInput
+                            style={styles.amountBoughtText}
+                            keyboardType="numeric"
+                            maxLength={20}
+                            onChangeText={coinAmountBought =>
+                              this.setState({ coinAmountBought })
+                            }
+                          />
+                        </View>
+                        <Button
+                          title="Submit"
+                          color="#841584"
+                          onPress={this._saveNewCoin}
                         />
                       </View>
                     )}
-                    {this.state.isAddCoinVisible && (
-                      <Button
-                        title="Submit"
-                        color="#841584"
-                        onPress={this._saveNewCoin}
-                      />
-                    )}
                   </View>
+                  {/* BINANCE */}
                   <View style={styles.modalChoice}>
-                    <Button
-                      title="Binance"
-                      color="#841584"
-                      onPress={this._openBinance}
+                    <ExchangeButton
+                      exchangeName={"binance"}
+                      color={"#841584"}
+                      refreshCoins={this.props.refreshCoins}
+                      whichExchange={this._whichExchange}
+                      isOpen = {this.state.binance}
                     />
-                    {this.state.isBinanceVisible && (
-                      <View style={styles.addInfoBox}>
-                        <Text style={styles.keyText}>API KEY</Text>
-                        <TextInput
-                          style={styles.textBox}
-                          onChangeText={binanceAPIKey =>
-                            this.setState({ binanceAPIKey })
-                          }
-                        />
-                        <Text style={styles.keyText}>SECRET KEY</Text>
-                        <TextInput
-                          style={styles.textBox}
-                          editable={true}
-                          onChangeText={binanceSecret =>
-                            this.setState({ binanceSecret })
-                          }
-                        />
-                      </View>
-                    )}
-                    {this.state.isBinanceVisible && (
-                      <Button
-                        title="Submit"
-                        color="#841584"
-                        onPress={this._saveBinance}
-                      />
-                    )}
                   </View>
+                  {/* BITTREX */}
                   <View style={styles.modalChoice}>
-                    <Button
-                      title="Bittrex"
-                      color="#841584"
-                      onPress={this._openBittrex}
+                    <ExchangeButton
+                      exchangeName={"bittrex"}
+                      color={"#841584"}
+                      refreshCoins={this.props.refreshCoins}
+                      whichExchange={this._whichExchange}
+                      isOpen = {this.state.bittrex}
                     />
-                    {this.state.isBittrexVisible && (
-                      <View style={styles.addInfoBox}>
-                        <Text style={styles.keyText}>API KEY</Text>
-                        <TextInput
-                          style={styles.textBox}
-                          editable={true}
-                          onChangeText={bittrexAPIKey =>
-                            this.setState({ bittrexAPIKey })
-                          }
-                        />
-                        <Text style={styles.keyText}>SECRET KEY</Text>
-                        <TextInput
-                          style={styles.textBox}
-                          editable={true}
-                          onChangeText={bittrexSecret =>
-                            this.setState({ bittrexSecret })
-                          }
-                        />
-                      </View>
-                    )}
-                    {this.state.isBittrexVisible && (
-                      <Button
-                        title="Submit"
-                        color="#841584"
-                        onPress={this._saveBittrex}
-                      />
-                    )}
                   </View>
+
+                  {/* CLOSE */}
                   <View style={styles.modalChoice}>
                     <Button
                       title="Close"

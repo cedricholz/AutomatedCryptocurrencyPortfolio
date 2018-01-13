@@ -129,3 +129,58 @@ export const binanceAPI = (
       coinCrossRoads(heldKeys, exchangeBalances);
     });
 };
+
+export const kucoinAPI = (
+  heldKeys,
+  exchangeBalances,
+  exchangeKeys,
+  coinCrossRoads
+) => {
+  console.log("Kucoin");
+
+  const host = "https://api.kucoin.com"
+  const endpoint = "/v1/account/balance"
+
+
+  APIKey = "5a5997a9379b472b2f02bb6a"
+  secretKey = "032031a1-5ae1-47a7-9f02-fa9dd9e418aa"
+  // APIKey: exchangeKeys.key,
+  // secretKey: exchangeKeys.secret
+  queryString = ""
+  const nonce = new Date().getTime();
+
+  stringForSign = `${endpoint}/${nonce}/${queryString}`
+
+  var sig = CryptoJS.HmacSHA256(
+    stringForSign.replace(/\&$/, ""),
+    secretKey
+  ).toString();
+
+  axios({
+    url: `https://api.binance.com/api/v3/account?${queryString}`,
+    headers: {
+      "KC-API-KEY": APIKey,
+      "KC-API-NONCE" : nonce,
+      "KC-API-SIGNATURE": sig
+    }
+  })
+    .then(response => {
+      console.log(response);
+
+      coinCrossRoads(heldKeys, exchangeBalances);
+    })
+    .catch(error => {
+      console.log("ERROR");
+      console.log(error);
+      if (error.response.data.msg == "API-key format invalid.") {
+        store.delete("kucoin");
+
+        Alert.alert(
+          "Error Retrieving Kucoin Data",
+          "API or Secret Key Invalid",
+          [{ text: "OK", onPress: () => console.log("OK Pressed") }]
+        );
+      }
+      coinCrossRoads(heldKeys, exchangeBalances);
+    });
+};
