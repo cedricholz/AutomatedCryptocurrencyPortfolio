@@ -52,5 +52,4 @@ buck-out/
 */fastlane/Preview.html
 */fastlane/screenshots
 
-secrets/bittrex_secrets.json
-secrets/binance_secrets.json
+
