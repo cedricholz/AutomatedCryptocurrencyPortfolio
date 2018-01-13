@@ -7,6 +7,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "base-64": "^0.1.0",
     "binancesdk": "^0.3.4",
     "crypto-js": "^3.1.9-1",
     "eslint-plugin-react-native": "^3.2.0",
@@ -22,6 +23,7 @@
     "react-native-node.bittrex.api": "0.0.1",
     "react-native-pop-menu": "0.0.9",
     "react-native-randombytes": "^3.0.0",
+    "react-native-simple-encryption": "^1.2.1",
     "react-native-simple-store": "^1.3.0"
   },
   "devDependencies": {

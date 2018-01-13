@@ -17,7 +17,7 @@ import {
 import { saveSecrets } from "./../Utils/Utils.js";
 import ExchangeButton from "./ExchangeButton";
 
-const exchanges = ['bittrex', 'binance', 'kucoin'];
+const modalButtons = ["isAddCoinVisible", "bittrex", "binance", "kucoin"];
 
 class AddModal extends React.Component {
   constructor(props) {
@@ -28,29 +28,27 @@ class AddModal extends React.Component {
       isAddCoinVisible: false,
       coinBought: "",
       coinAmountBought: 0,
-      binance : false,
-      bittrex : false,
+      binance: false,
+      bittrex: false,
       kucoin: false
     };
   }
 
-  _whichExchange = (exchangeName) =>{
-    for(var i in exchanges){
-
-      if (exchanges[i] == exchangeName){
+  _openButton = exchangeName => {
+    for (var i in modalButtons) {
+      if (modalButtons[i] == exchangeName) {
         this.setState({
-          [exchanges[i]]: true
+          [modalButtons[i]]: true
         });
-      }
-      else{
+      } else {
         this.setState({
-          [exchanges[i]]: false
+          [modalButtons[i]]: false
         });
       }
     }
   };
 
-  _closeExchange = (exchangeName) =>{
+  _closeExchange = exchangeName => {
     this.setState({
       [exchangeName]: false
     });
@@ -75,10 +73,13 @@ class AddModal extends React.Component {
 
   _openAddCoin = () =>
     this.setState({
-      isAddCoinVisible: true,
+      isAddCoinVisible: true
     });
 
-  _showModal = () => this.setState({ isModalVisible: true });
+  _showModal = () => {
+    this.setState({ isModalVisible: true });
+    this._openButton("")
+  };
 
   _hideModal = () =>
     this.setState({
@@ -114,7 +115,9 @@ class AddModal extends React.Component {
                     <Button
                       title="Add Coin"
                       color="#841584"
-                      onPress={this._openAddCoin}
+                      onPress={() => {
+                        this._openButton("isAddCoinVisible");
+                      }}
                     />
                     {this.state.isAddCoinVisible && (
                       <View>
@@ -148,9 +151,9 @@ class AddModal extends React.Component {
                       exchangeName={"binance"}
                       color={"#841584"}
                       refreshCoins={this.props.refreshCoins}
-                      whichExchange={this._whichExchange}
-                      isOpen = {this.state.binance}
-                      closeExchangeButton = {this._closeExchange}
+                      whichExchange={this._openButton}
+                      isOpen={this.state.binance}
+                      closeExchangeButton={this._closeExchange}
                     />
                   </View>
                   {/* BITTREX */}
@@ -159,9 +162,9 @@ class AddModal extends React.Component {
                       exchangeName={"bittrex"}
                       color={"#841584"}
                       refreshCoins={this.props.refreshCoins}
-                      whichExchange={this._whichExchange}
-                      isOpen = {this.state.bittrex}
-                      closeExchangeButton = {this._closeExchange}
+                      whichExchange={this._openButton}
+                      isOpen={this.state.bittrex}
+                      closeExchangeButton={this._closeExchange}
                     />
                   </View>
 
@@ -170,9 +173,9 @@ class AddModal extends React.Component {
                       exchangeName={"kucoin"}
                       color={"#841584"}
                       refreshCoins={this.props.refreshCoins}
-                      whichExchange={this._whichExchange}
-                      isOpen = {this.state.kucoin}
-                      closeExchangeButton = {this._closeExchange}
+                      whichExchange={this._openButton}
+                      isOpen={this.state.kucoin}
+                      closeExchangeButton={this._closeExchange}
                     />
                   </View>
 

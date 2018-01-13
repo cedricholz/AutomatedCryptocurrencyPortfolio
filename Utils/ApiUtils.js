@@ -130,6 +130,31 @@ export const binanceAPI = (
     });
 };
 
+const base64 = input => {
+  const chars =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+  let str = input;
+  let output = "";
+
+  for (
+    let block = 0, charCode, i = 0, map = chars;
+    str.charAt(i | 0) || ((map = "="), i % 1);
+    output += map.charAt(63 & (block >> (8 - (i % 1) * 8)))
+  ) {
+    charCode = str.charCodeAt((i += 3 / 4));
+
+    if (charCode > 0xff) {
+      throw new Error(
+        "'btoa' failed: The string to be encoded contains characters outside of the Latin1 range."
+      );
+    }
+
+    block = (block << 8) | charCode;
+  }
+
+  return output;
+};
+
 export const kucoinAPI = (
   heldKeys,
   exchangeBalances,
@@ -138,29 +163,41 @@ export const kucoinAPI = (
 ) => {
   console.log("Kucoin");
 
-  const host = "https://api.kucoin.com"
-  const endpoint = "/v1/account/balance"
+  const host = "https://api.kucoin.com";
+  const endpoint = "/v1/account/balance";
 
 
-  APIKey = "5a5997a9379b472b2f02bb6a"
-  secretKey = "032031a1-5ae1-47a7-9f02-fa9dd9e418aa"
   // APIKey: exchangeKeys.key,
   // secretKey: exchangeKeys.secret
-  queryString = ""
+  //queryString = "limit=12&page=1";
   const nonce = new Date().getTime();
 
-  stringForSign = `${endpoint}/${nonce}/${queryString}`
+  // stringForSign = `${endpoint}/${nonce}/${queryString}`;
+  stringForSign = `${endpoint}/${nonce}/`;
+
+  //
+  // var x = base64(stringForSign);
+  // console.log(x)
+  // console.log(x.replace(/\&$/, ""))
+
+  var base64 = require("base-64");
+  var utf8 = require("utf8");
+
+  var bytes = utf8.encode(stringForSign);
+  var encoded = base64.encode(bytes);
+  console.log(encoded);
 
   var sig = CryptoJS.HmacSHA256(
-    stringForSign.replace(/\&$/, ""),
+    encoded.replace(/\&$/, ""),
     secretKey
   ).toString();
 
   axios({
-    url: `https://api.binance.com/api/v3/account?${queryString}`,
+    url: `https://api.binance.com/api/v3/account`,
     headers: {
+      "Content-Type": "application/json",
       "KC-API-KEY": APIKey,
-      "KC-API-NONCE" : nonce,
+      "KC-API-NONCE": nonce,
       "KC-API-SIGNATURE": sig
     }
   })

@@ -49,6 +49,7 @@ class CoinContainer extends Component {
   }
 
   componentDidMount() {
+    //this.state.coinFunctions['kucoin']("sd f", "sd","","")
     this.loadAddedCoins();
   }
 
