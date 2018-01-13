@@ -17,7 +17,7 @@ import {
 import { saveSecrets } from "./../Utils/Utils.js";
 import ExchangeButton from "./ExchangeButton";
 
-const exchanges = ['bittrex', 'binance'];
+const exchanges = ['bittrex', 'binance', 'kucoin'];
 
 class AddModal extends React.Component {
   constructor(props) {
@@ -29,7 +29,8 @@ class AddModal extends React.Component {
       coinBought: "",
       coinAmountBought: 0,
       binance : false,
-      bittrex : false
+      bittrex : false,
+      kucoin: false
     };
   }
 
@@ -46,9 +47,13 @@ class AddModal extends React.Component {
           [exchanges[i]]: false
         });
       }
-
     }
-    console.log(exchangeName)
+  };
+
+  _closeExchange = (exchangeName) =>{
+    this.setState({
+      [exchangeName]: false
+    });
   };
 
   _saveNewCoin = () => {
@@ -145,6 +150,7 @@ class AddModal extends React.Component {
                       refreshCoins={this.props.refreshCoins}
                       whichExchange={this._whichExchange}
                       isOpen = {this.state.binance}
+                      closeExchangeButton = {this._closeExchange}
                     />
                   </View>
                   {/* BITTREX */}
@@ -155,6 +161,18 @@ class AddModal extends React.Component {
                       refreshCoins={this.props.refreshCoins}
                       whichExchange={this._whichExchange}
                       isOpen = {this.state.bittrex}
+                      closeExchangeButton = {this._closeExchange}
+                    />
+                  </View>
+
+                  <View style={styles.modalChoice}>
+                    <ExchangeButton
+                      exchangeName={"kucoin"}
+                      color={"#841584"}
+                      refreshCoins={this.props.refreshCoins}
+                      whichExchange={this._whichExchange}
+                      isOpen = {this.state.kucoin}
+                      closeExchangeButton = {this._closeExchange}
                     />
                   </View>
 

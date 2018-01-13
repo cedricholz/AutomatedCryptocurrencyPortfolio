@@ -28,19 +28,14 @@ class ExchangeButton extends React.Component {
 
   _openTextField = () => {
     this.props.whichExchange(this.props.exchangeName);
-    // this.setState({
-    //   isOpen: true
-    // });
   };
 
   _saveKeys = () => {
     const { apiKey, secretKey } = this.state;
     if (apiKey.length > 0 && secretKey.length > 0) {
         saveSecrets(this.props.exchangeName, apiKey, secretKey, this.props.refreshCoins);
-        // this.setState({
-        //   isOpen: false
-        // });
     }
+    this.props.closeExchangeButton(this.props.exchangeName);
   };
 
   render() {

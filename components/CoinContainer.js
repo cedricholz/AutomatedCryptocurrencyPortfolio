@@ -58,7 +58,6 @@ class CoinContainer extends Component {
 
     store.get("addedCoins").then(res => {
       addedCoinList = [];
-      console.log(res)
       if (res != null) {
         Object.keys(res.coinData).forEach(key => {
           coin = res.coinData[key];
