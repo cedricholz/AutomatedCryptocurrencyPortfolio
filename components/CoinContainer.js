@@ -18,6 +18,7 @@ import EditModal from "./EditModal";
 import Modal from "react-native-modal";
 import store from "react-native-simple-store";
 import { saveAddedCoin, deleteCoin } from "./../Utils/Utils.js";
+import { bittrexAPI, binanceAPI } from "./../Utils/ApiUtils.js";
 const CryptoJS = require("crypto-js");
 
 const exchanges = ["bittrex", "binance"];
@@ -40,8 +41,8 @@ class CoinContainer extends Component {
         dict: {}
       },
       coinFunctions: {
-        bittrex: this.getBittrexCoins,
-        binance: this.getBinanceCoins
+        bittrex: bittrexAPI,
+        binance: binanceAPI
       }
     };
   }
@@ -107,9 +108,7 @@ class CoinContainer extends Component {
         //Create Dictionary of Coin MarketCap Coins
         Object.keys(response.data).forEach(key => {
           const symbol = response.data[key].symbol;
-          // if (symbol === "MIOTA") {
-          //   coinDict["IOTA"] = response.data[key];
-          // }
+
           coinDict[symbol] = response.data[key];
         });
         this.setState({
@@ -119,7 +118,6 @@ class CoinContainer extends Component {
 
         this.coinCrossRoads(heldKeys, exchangeBalances);
 
-        //this.getBittrexCoins(exchangeBalances);
       })
       .catch(error => {
         console.log(error);
@@ -145,130 +143,11 @@ class CoinContainer extends Component {
       this.state.coinFunctions[exchangeKeys.exchangeName](
         heldKeys,
         exchangeBalances,
-        exchangeKeys
+        exchangeKeys, this.coinCrossRoads
       );
     } else {
       this.updateCoinsWithCoinMarketCapData(exchangeBalances);
     }
-  };
-
-  getBittrexCoins = (heldKeys, exchangeBalances, exchangeKeys) => {
-    console.log("BITTREX");
-
-    const APIKey = exchangeKeys.key;
-    const secretKey = exchangeKeys.secret;
-    const nonce = new Date().getTime();
-    const uri = `https://bittrex.com/api/v1.1/account/getbalances?apikey=${APIKey}&nonce=${nonce}`;
-    const sig = CryptoJS.HmacSHA512(
-      uri.replace(/\&$/, ""),
-      secretKey
-    ).toString();
-
-    axios({
-      url: uri,
-      headers: {
-        apisign: sig
-      }
-    })
-      .then(response => {
-        const allCoins = response.data.result;
-
-        const bittrexBalances = {};
-
-        Object.keys(allCoins).forEach(key => {
-          const balance = parseFloat(allCoins[key].Balance);
-
-          if (balance !== 0) {
-            const symbol = allCoins[key].Currency;
-            bittrexBalances[symbol] = { cur: symbol, bal: balance };
-          }
-        });
-
-        exchangeBalances.bittrex = bittrexBalances;
-
-        this.coinCrossRoads(heldKeys, exchangeBalances);
-      })
-      .catch(error => {
-        console.log("BITTREX ERROR");
-        console.log(error);
-
-        if (
-          error
-            .toString()
-            .includes(
-              "TypeError: Requested keys of a value that is not an object."
-            )
-        ) {
-          store.delete("bittrex");
-
-          Alert.alert(
-            "Error Retrieving Bittrex Data",
-            "API or Secret Key Invalid",
-            [{ text: "OK", onPress: () => console.log("OK Pressed") }]
-          );
-        }
-        this.coinCrossRoads(heldKeys, exchangeBalances);
-      });
-  };
-
-  getBinanceCoins = (heldKeys, exchangeBalances, exchangeKeys) => {
-    console.log("BINANCE");
-    const Configs = {
-      endPointUrl: "https://www.binance.com/api/v3/account/",
-      APIKey: exchangeKeys.key,
-      secretKey: exchangeKeys.secret
-    };
-
-    var timeStamp = new Date().getTime();
-    var recvWindow = "6000000";
-
-    var payload = `timestamp=${timeStamp}&recvWindow=${recvWindow}`;
-
-    var sig = CryptoJS.HmacSHA256(
-      payload.replace(/\&$/, ""),
-      Configs.secretKey
-    ).toString();
-
-    axios({
-      url: `https://api.binance.com/api/v3/account?${payload}&signature=${sig}`,
-      headers: {
-        "x-mbx-apikey": Configs.APIKey
-      }
-    })
-      .then(response => {
-        var binanceBalances = {};
-
-        const apiBalances = response.data.balances;
-        for (let coin in apiBalances) {
-          var symbol = apiBalances[coin].asset;
-          var coinBalance = parseFloat(apiBalances[coin].free);
-          if (coinBalance !== 0) {
-            if (symbol == "IOTA") {
-              binanceBalances["MIOTA"] = { cur: "MIOTA", bal: coinBalance };
-            } else {
-              binanceBalances[symbol] = { cur: symbol, bal: coinBalance };
-            }
-          }
-        }
-
-        exchangeBalances.binance = binanceBalances;
-
-        this.coinCrossRoads(heldKeys, exchangeBalances);
-      })
-      .catch(error => {
-        console.log("ERROR");
-        console.log(error);
-        if (error.response.data.msg == "API-key format invalid.") {
-          store.delete("binance");
-
-          Alert.alert(
-            "Error Retrieving Binance Data",
-            "API or Secret Key Invalid",
-            [{ text: "OK", onPress: () => console.log("OK Pressed") }]
-          );
-        }
-        this.coinCrossRoads(heldKeys, exchangeBalances);
-      });
   };
 
   addToHeldCoins = (
