@@ -97,7 +97,7 @@ class CoinContainer extends Component {
     getCoinMarketCapDict = heldKeys => {
         console.log("COINMARKETCAP");
         axios
-            .get("https://api.coinmarketcap.com/v1/ticker/?limit=20")
+            .get("https://api.coinmarketcap.com/v1/ticker/?limit=1000")
             .then(response => {
                 const coinDict = {};
                 //Create Dictionary of Coin MarketCap Coins
@@ -389,7 +389,8 @@ const styles = {
     header: {
         fontWeight: "bold",
         fontSize: 30,
-        color:"#05ffa1"
+        // color:"#05ffa1"
+        color:"#FFFFFF"
     }
 };
 

@@ -74,12 +74,12 @@ export const binanceAPI = (heldKeys,
         secretKey: exchangeKeys.secret
     };
 
-    var timeStamp = new Date().getTime();
-    var recvWindow = "6000000";
+    let  timeStamp = new Date().getTime()*1000-1000;
+    let recvWindow = "20000";
 
-    var payload = `timestamp=${timeStamp}&recvWindow=${recvWindow}`;
+    let payload = `timestamp=${timeStamp}&recvWindow=${recvWindow}`;
 
-    var sig = CryptoJS.HmacSHA256(
+    let sig = CryptoJS.HmacSHA256(
         payload.replace(/\&$/, ""),
         Configs.secretKey
     ).toString();
@@ -91,12 +91,12 @@ export const binanceAPI = (heldKeys,
         }
     })
         .then(response => {
-            var binanceBalances = {};
+            let binanceBalances = {};
 
             const apiBalances = response.data.balances;
             for (let coin in apiBalances) {
-                var symbol = apiBalances[coin].asset;
-                var coinBalance = parseFloat(apiBalances[coin].free);
+                let symbol = apiBalances[coin].asset;
+                const coinBalance = parseFloat(apiBalances[coin].free);
                 if (coinBalance !== 0) {
                     if (symbol === "IOTA") {
                         binanceBalances["MIOTA"] = {cur: "MIOTA", bal: coinBalance};
@@ -111,7 +111,7 @@ export const binanceAPI = (heldKeys,
             coinCrossRoads(heldKeys, exchangeBalances);
         })
         .catch(error => {
-            console.log("ERROR");
+            console.log("BINANCE ERROR");
             console.log(error);
             if (error.response.data.msg === "API-key format invalid.") {
                 store.delete("binance");
@@ -239,39 +239,39 @@ export const cryptopiaAPI = (heldKeys,
     const encodedURI = encodeURIComponent('https://www.cryptopia.co.nz/api/GetBalance').toLowerCase();
 
     const signature = `${APIKey}POST${encodedURI}${nonce}mZFLkyvTelC5g8XnyQrpOw==`;
-    console.log("SIGNATURE")
-    console.log(signature)
+    console.log("SIGNATURE");
+    console.log(signature);
 
 
     const bufferedSecretKey = secretKey + "=".repeat(4 - secretKey.length % 4)
 
     const apiDecoded = decodeBase64(bufferedSecretKey);
-    console.log("apiDecoded")
-    console.log(apiDecoded)
-    console.log(" ")
+    console.log("apiDecoded");
+    console.log(apiDecoded);
+    console.log(" ");
 
-    console.log("signature")
-    console.log(signature)
-    console.log(" ")
+    console.log("signature");
+    console.log(signature);
+    console.log(" ");
     const signatureEncoded = encodeUTF8(signature);
-    console.log("signatureEncoded")
-    console.log(signatureEncoded)
-    console.log(" ")
+    console.log("signatureEncoded");
+    console.log(signatureEncoded);
+    console.log(" ");
 
     const hmacsignature = base64(CryptoJS.HmacSHA256(apiDecoded, signature).toString());
-    console.log("hmacsignature")
-    console.log(hmacsignature)
-    console.log(" ")
+    console.log("hmacsignature");
+    console.log(hmacsignature);
+    console.log(" ");
 
     const hmacDecoded = decodeUTF8(hmacsignature);
-    console.log("hmacDecoded")
-    console.log(hmacDecoded)
-    console.log(" ")
+    console.log("hmacDecoded");
+    console.log(hmacDecoded);
+    console.log(" ");
 
     const header_val = `amx ${APIKey}:${hmacDecoded}:${nonce}`;
-    console.log("header_val")
-    console.log(header_val)
-    console.log(" ")
+    console.log("header_val");
+    console.log(header_val);
+    console.log(" ");
 
 
     axios({

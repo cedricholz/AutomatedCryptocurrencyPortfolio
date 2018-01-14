@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
         marginBottom: 15
     },
     timeText:{
-        color:"#FFFFFF"
+        color:"#253145"
     },
     coinSymbol: {
         marginTop: 10,
@@ -101,32 +101,34 @@ const styles = StyleSheet.create({
         marginRight: 5,
         // color: "#264653",
         fontWeight: "bold",
-        color:"#b967ff"
+        // color:"#b967ff"
+        color:"#253145",
     },
     coinName: {
         marginTop: 10,
         marginLeft: 5,
         marginRight: 0,
-        color:"#FFFFFF"
+        color:"#253145"
     },
     bal: {
         marginTop: 10,
         marginLeft: 5,
         marginRight: 0,
-        color:"#FFFFFF"
+        color:"#253145"
     },
     usd: {
         marginTop: 10,
         marginLeft: 5,
         marginRight: 0,
         // color: "#E9C46A",
-        color:"#fffb96"
+        // color:"#fffb96"
+        color:"#253145",
     },
     heldValue: {
         marginTop: 10,
         marginLeft: 5,
         marginRight: 5,
-        color:"#FFFFFF"
+        color:"#253145"
     },
     seperator: {
         marginTop: 10,
@@ -140,7 +142,8 @@ const styles = StyleSheet.create({
         marginLeft: "auto",
         marginRight: 10,
         fontWeight: "bold",
-        color:"#01cdfe",
+        // color:"#01cdfe",
+        color:"#FFFFFF",
     },
     statisticsContainer: {
         display: "flex",
@@ -151,9 +154,11 @@ const styles = StyleSheet.create({
         justifyContent: "space-around"
     },
     percentChangePlus: {
-        //color: "#009B77",
+        // color: "#009B77",
         // color: "#2A9D8F",
-        color: "#05ffa1",
+        // color: "#05ffa1",
+        // color:"#FFFFFF",
+        color:"#008080",
         fontWeight: "bold",
         marginLeft: 5
     },
@@ -161,6 +166,7 @@ const styles = StyleSheet.create({
         // color: "#9B2335",
         // color: "#D81E5B",
         color: "#EC25AD",
+        // color:"#FFFFFF",
         fontWeight: "bold",
         marginLeft: 5
     }
