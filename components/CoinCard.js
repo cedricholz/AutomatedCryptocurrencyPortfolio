@@ -143,12 +143,14 @@ const styles = StyleSheet.create({
     percentChangePlus: {
         //color: "#009B77",
         color: "#2A9D8F",
+        // color: "#01CDFE",
         fontWeight: "bold",
         marginLeft: 5
     },
     percentChangeMinus: {
         // color: "#9B2335",
         color: "#D81E5B",
+        // color: "#EC25AD",
         fontWeight: "bold",
         marginLeft: 5
     }
