@@ -30,8 +30,8 @@ class AddModal extends React.Component {
     }
 
     _openButton = exchangeName => {
-        for (var i in modalButtons) {
-            if (modalButtons[i] == exchangeName) {
+        for (let i in modalButtons) {
+            if (modalButtons[i] === exchangeName) {
                 this.setState({
                     [modalButtons[i]]: true
                 });
@@ -148,7 +148,7 @@ class AddModal extends React.Component {
                                             closeExchangeButton={this._closeExchange}
                                         />
                                     </View>
-
+                                    {/*
                                     <View style={styles.modalChoice}>
                                         <ExchangeButton
                                             exchangeName={"kucoin"}
@@ -159,6 +159,7 @@ class AddModal extends React.Component {
                                             closeExchangeButton={this._closeExchange}
                                         />
                                     </View>
+                                    */}
 
                                     {/* CLOSE */}
                                     <View style={styles.modalChoice}>
