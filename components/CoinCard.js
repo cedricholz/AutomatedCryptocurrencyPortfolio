@@ -38,7 +38,7 @@ const CoinCard = ({
                 </View>
 
                 <View style={statisticsContainer}>
-                    <Text>
+                    <Text style = {styles.timeText}>
                         1h:
                         <Text
                             style={
@@ -50,7 +50,7 @@ const CoinCard = ({
                         </Text>
                     </Text>
 
-                    <Text>
+                    <Text style = {styles.timeText}>
                         24h:
                         <Text
                             style={
@@ -62,7 +62,7 @@ const CoinCard = ({
                         </Text>
                     </Text>
 
-                    <Text>
+                    <Text style = {styles.timeText}>
                         7d:
                         <Text
                             style={
@@ -92,65 +92,75 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         marginBottom: 15
     },
+    timeText:{
+        color:"#FFFFFF"
+    },
     coinSymbol: {
         marginTop: 10,
         marginLeft: 5,
         marginRight: 5,
         // color: "#264653",
-        fontWeight: "bold"
+        fontWeight: "bold",
+        color:"#b967ff"
     },
     coinName: {
         marginTop: 10,
         marginLeft: 5,
-        marginRight: 0
+        marginRight: 0,
+        color:"#FFFFFF"
     },
     bal: {
         marginTop: 10,
         marginLeft: 5,
-        marginRight: 0
+        marginRight: 0,
+        color:"#FFFFFF"
     },
     usd: {
         marginTop: 10,
         marginLeft: 5,
-        marginRight: 0
-        // color: "#E9C46A"
+        marginRight: 0,
+        // color: "#E9C46A",
+        color:"#fffb96"
     },
     heldValue: {
         marginTop: 10,
         marginLeft: 5,
-        marginRight: 5
+        marginRight: 5,
+        color:"#FFFFFF"
     },
     seperator: {
-        marginTop: 10
+        marginTop: 10,
+        color:"#FFFFFF"
+    },
+    moneySymbol: {
+        fontWeight: "bold"
     },
     coinPrice: {
         marginTop: 10,
         marginLeft: "auto",
         marginRight: 10,
-        fontWeight: "bold"
-    },
-    moneySymbol: {
-        fontWeight: "bold"
+        fontWeight: "bold",
+        color:"#01cdfe",
     },
     statisticsContainer: {
         display: "flex",
-        borderTopColor: "#FAFAFA",
-        borderTopWidth: 2,
+        // borderTopColor: "#FAFAFA",
+        // borderTopWidth: 2,
         padding: 10,
         flexDirection: "row",
         justifyContent: "space-around"
     },
     percentChangePlus: {
         //color: "#009B77",
-        color: "#2A9D8F",
-        // color: "#01CDFE",
+        // color: "#2A9D8F",
+        color: "#05ffa1",
         fontWeight: "bold",
         marginLeft: 5
     },
     percentChangeMinus: {
         // color: "#9B2335",
-        color: "#D81E5B",
-        // color: "#EC25AD",
+        // color: "#D81E5B",
+        color: "#EC25AD",
         fontWeight: "bold",
         marginLeft: 5
     }

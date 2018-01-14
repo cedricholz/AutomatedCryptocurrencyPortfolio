@@ -388,7 +388,8 @@ const styles = {
     },
     header: {
         fontWeight: "bold",
-        fontSize: 30
+        fontSize: 30,
+        color:"#05ffa1"
     }
 };
 
