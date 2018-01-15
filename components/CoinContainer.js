@@ -362,11 +362,10 @@ const styles = {
         flex: 1
     },
     headerContainer: {
-        display: "flex",
-        marginTop: 30,
-        marginBottom: 0,
-        marginLeft: 50,
-        alignItems: "flex-start"
+        // display: "flex",
+        marginTop: 20,
+        marginLeft: 20,
+        // alignItems: "flex-start"
     },
     modalContainer: {
         display: "flex",

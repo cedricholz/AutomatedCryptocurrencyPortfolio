@@ -99,7 +99,8 @@ const styles = StyleSheet.create({
         marginBottom: 15
     },
     timeText:{
-        color:"#253145"
+        //color:"#253145"
+        color: `${coinColor}`
     },
     coinSymbol: {
         marginTop: 10,
