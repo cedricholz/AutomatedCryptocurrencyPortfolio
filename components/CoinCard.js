@@ -80,9 +80,8 @@ const CoinCard = ({
 };
 
 
-// const coinColor = "#2F4F4F";
+// const coinColor = "#395E66";
 const coinColor = "#ffffff";
-
 
 
 
@@ -167,17 +166,24 @@ const styles = StyleSheet.create({
         // color: "#2A9D8F",
         // color: "#05ffa1",
         // color:"#39ff14",
-        color:"#83f52c",
+        // color:"#83f52c",
+        color:"#44CF6C",
+
+
         // color:"#008080",
         fontWeight: "bold",
         marginLeft: 5
     },
     percentChangeMinus: {
         // color: "#9B2335",
-        color: "#6e0dd0",
+        // color: "#6e0dd0",
         // color: "#EC25AD",
-        // color: "#FF1493",
-        // color:"#d121d1",
+        color: "#89023E",
+
+        // color:"#3B3355",
+
+        // color:"#873D48",
+
         fontWeight: "bold",
         marginLeft: 5
     }
