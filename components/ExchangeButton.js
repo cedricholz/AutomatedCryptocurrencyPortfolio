@@ -34,7 +34,9 @@ class ExchangeButton extends React.Component {
     render() {
         return (
             <View>
-                <Button title={this.props.exchangeName} color={this.props.color} onPress={this._openTextField}/>
+                <View style={styles.buttonBorder}>
+                    <Button title={this.props.exchangeName} color={this.props.color} onPress={this._openTextField}/>
+                </View>
                 {this.props.isOpen && (
                     <View>
                         <View style={styles.addInfoBox}>
@@ -50,7 +52,9 @@ class ExchangeButton extends React.Component {
                                 onChangeText={secretKey => this.setState({secretKey})}
                             />
                         </View>
-                        <Button title="Submit" color="#841584" onPress={this._saveKeys}/>
+                        <View style={styles.buttonBorder}>
+                            <Button title="Submit" color="#2b9b6c" onPress={this._saveKeys}/>
+                        </View>
                     </View>
                 )}
             </View>
@@ -94,7 +98,11 @@ const styles = {
         display: "flex",
         alignItems: "flex-end",
         marginRight: 20
-    }
+    },
+    buttonBorder: {
+        borderWidth: 5,
+        borderColor: "#FFFFFF"
+    },
 };
 
 export default ExchangeButton;

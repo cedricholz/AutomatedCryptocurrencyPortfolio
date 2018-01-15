@@ -79,6 +79,13 @@ const CoinCard = ({
     );
 };
 
+
+// const coinColor = "#2F4F4F";
+const coinColor = "#ffffff";
+
+
+
+
 const styles = StyleSheet.create({
     container: {
         display: "flex",
@@ -102,19 +109,20 @@ const styles = StyleSheet.create({
         // color: "#264653",
         fontWeight: "bold",
         // color:"#b967ff"
-        color:"#253145",
+        // color:"#253145",
+        color: `${coinColor}`,
     },
     coinName: {
         marginTop: 10,
         marginLeft: 5,
         marginRight: 0,
-        color:"#253145"
+        color: `${coinColor}`,
     },
     bal: {
         marginTop: 10,
         marginLeft: 5,
         marginRight: 0,
-        color:"#253145"
+        color: `${coinColor}`,
     },
     usd: {
         marginTop: 10,
@@ -122,13 +130,14 @@ const styles = StyleSheet.create({
         marginRight: 0,
         // color: "#E9C46A",
         // color:"#fffb96"
-        color:"#253145",
+        color: `${coinColor}`,
     },
     heldValue: {
         marginTop: 10,
         marginLeft: 5,
         marginRight: 5,
-        color:"#253145"
+        color: `${coinColor}`,
+        // color:"#253145"
     },
     seperator: {
         marginTop: 10,
@@ -157,16 +166,18 @@ const styles = StyleSheet.create({
         // color: "#009B77",
         // color: "#2A9D8F",
         // color: "#05ffa1",
-        // color:"#FFFFFF",
-        color:"#008080",
+        // color:"#39ff14",
+        color:"#83f52c",
+        // color:"#008080",
         fontWeight: "bold",
         marginLeft: 5
     },
     percentChangeMinus: {
         // color: "#9B2335",
-        // color: "#D81E5B",
-        color: "#EC25AD",
-        // color:"#FFFFFF",
+        color: "#6e0dd0",
+        // color: "#EC25AD",
+        // color: "#FF1493",
+        // color:"#d121d1",
         fontWeight: "bold",
         marginLeft: 5
     }

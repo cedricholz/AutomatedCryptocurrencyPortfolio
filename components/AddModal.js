@@ -80,7 +80,9 @@ class AddModal extends React.Component {
         return (
             <View>
                 <View style={styles.buttonContainer}>
-                    <Button onPress={this._showModal} title="  +  " color="#841584"/>
+                    <View style={styles.buttonBorder}>
+                        <Button onPress={this._showModal} title="  +  " color="#2b9b6c"/>
+                    </View>
                 </View>
                 <TouchableWithoutFeedback onPress={this._hideModal.bind(this)}>
                     <Modal
@@ -93,13 +95,15 @@ class AddModal extends React.Component {
                                 <ScrollView style={styles.modalScrollView}>
                                     {/* ADD COIN */}
                                     <View style={styles.modalChoice}>
-                                        <Button
-                                            title="Add Coin"
-                                            color="#841584"
-                                            onPress={() => {
-                                                this._openButton("isAddCoinVisible");
-                                            }}
-                                        />
+                                        <View style={styles.buttonBorder}>
+                                            <Button
+                                                title="Add Coin"
+                                                color="#2b9b6c"
+                                                onPress={() => {
+                                                    this._openButton("isAddCoinVisible");
+                                                }}
+                                            />
+                                        </View>
                                         {this.state.isAddCoinVisible && (
                                             <View>
                                                 <View style={styles.addInfoBox}>
@@ -118,11 +122,13 @@ class AddModal extends React.Component {
                                                         }
                                                     />
                                                 </View>
-                                                <Button
-                                                    title="Submit"
-                                                    color="#841584"
-                                                    onPress={this._saveNewCoin}
-                                                />
+                                                <View style={styles.buttonBorder}>
+                                                    <Button
+                                                        title="Submit"
+                                                        color="#2b9b6c"
+                                                        onPress={this._saveNewCoin}
+                                                    />
+                                                </View>
                                             </View>
                                         )}
                                     </View>
@@ -130,7 +136,7 @@ class AddModal extends React.Component {
                                     <View style={styles.modalChoice}>
                                         <ExchangeButton
                                             exchangeName={"binance"}
-                                            color={"#841584"}
+                                            color={"#2b9b6c"}
                                             refreshCoins={this.props.refreshCoins}
                                             whichExchange={this._openButton}
                                             isOpen={this.state.binance}
@@ -139,9 +145,10 @@ class AddModal extends React.Component {
                                     </View>
                                     {/* BITTREX */}
                                     <View style={styles.modalChoice}>
+
                                         <ExchangeButton
                                             exchangeName={"bittrex"}
-                                            color={"#841584"}
+                                            color={"#2b9b6c"}
                                             refreshCoins={this.props.refreshCoins}
                                             whichExchange={this._openButton}
                                             isOpen={this.state.bittrex}
@@ -163,11 +170,13 @@ class AddModal extends React.Component {
 
                                     {/* CLOSE */}
                                     <View style={styles.modalChoice}>
-                                        <Button
-                                            title="Close"
-                                            color="#841584"
-                                            onPress={this._hideModal}
-                                        />
+                                        <View style={styles.buttonBorder}>
+                                            <Button
+                                                title="Close"
+                                                color="#2b9b6c"
+                                                onPress={this._hideModal}
+                                            />
+                                        </View>
                                     </View>
                                 </ScrollView>
                             </View>
@@ -211,10 +220,15 @@ const styles = {
         marginRight: 10,
         textAlign: "center"
     },
+    buttonBorder: {
+        borderWidth: 5,
+        borderColor: "#FFFFFF"
+    },
     buttonContainer: {
         display: "flex",
         alignItems: "flex-end",
-        marginRight: 20
+        marginRight: 20,
+
     }
 };
 

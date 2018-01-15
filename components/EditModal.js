@@ -52,14 +52,17 @@ class EditModal extends React.Component {
                                     />
                                 </View>
                                 <View style={styles.twoButtons}>
+                                    <View style={styles.buttonBorder}>
                                     <Button
                                         style={styles.buttonContainer}
                                         title="Remove Coin"
-                                        color="#D81E5B"
+                                        color="#6e0dd0"
                                         onPress={() => {
                                             this._removeCoin(this.props.symbol);
                                         }}
                                     />
+                                    </View>
+                                    <View style={styles.buttonBorder}>
                                     <Button
                                         style={styles.buttonContainer}
                                         title="Submit Edit"
@@ -68,14 +71,17 @@ class EditModal extends React.Component {
                                             this._editCoin(this.props.symbol, parseFloat(this.state.coinAmountBought));
                                         }}
                                     />
+                                    </View>
                                 </View>
                                 <View style={styles.cancelButton}>
+                                    <View style={styles.buttonBorder}>
                                     <Button
                                         style={styles.buttonContainer}
                                         title="Cancel"
-                                        color="#841584"
+                                        color="#2b9b6c"
                                         onPress={this.props.close}
                                     />
+                                    </View>
                                 </View>
                             </View>
                         </ScrollView>
@@ -123,6 +129,10 @@ const styles = {
     cancelButton: {
         marginLeft: 50,
         marginRight: 50
+    },
+    buttonBorder: {
+        borderWidth: 5,
+        borderColor: "#FFFFFF"
     },
     twoButtons: {
         flex: 1,

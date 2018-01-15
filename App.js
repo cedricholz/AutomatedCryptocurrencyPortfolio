@@ -18,7 +18,9 @@ const styles = StyleSheet.create({
         flex: 1,
         // justifyContent: "center",
         // alignItems: "center",
-        // backgroundColor: "#2f3f47"
-        backgroundColor: "#05ffa1"
+        // backgroundColor: "#2f3f47",
+        backgroundColor: "#2b9b6c"
+
+        // backgroundColor: "#05ffa1"
     },
 });

@@ -353,6 +353,8 @@ class CoinContainer extends Component {
     }
 }
 
+
+
 const styles = {
     contentContainer: {
         // paddingBottom: 45,
