@@ -55,7 +55,8 @@ class AddModal extends React.Component {
         if (coinBought.length > 0 && coinAmountBought > 0) {
             this.props.addCoin(coinBought, coinAmountBought);
             this.setState({
-                isAddCoinVisible: false
+                // isAddCoinVisible: false
+                isModalVisible: false
             });
         }
     };
@@ -155,18 +156,18 @@ class AddModal extends React.Component {
                                             closeExchangeButton={this._closeExchange}
                                         />
                                     </View>
-                                    {/*
+
                                     <View style={styles.modalChoice}>
                                         <ExchangeButton
                                             exchangeName={"kucoin"}
-                                            color={"#841584"}
+                                            color={"#2b9b6c"}
                                             refreshCoins={this.props.refreshCoins}
                                             whichExchange={this._openButton}
                                             isOpen={this.state.kucoin}
                                             closeExchangeButton={this._closeExchange}
                                         />
                                     </View>
-                                    */}
+
 
                                     {/* CLOSE */}
                                     <View style={styles.modalChoice}>

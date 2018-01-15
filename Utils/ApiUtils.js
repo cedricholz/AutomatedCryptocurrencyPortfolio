@@ -63,6 +63,7 @@ export const bittrexAPI = (heldKeys,
         });
 };
 
+
 export const binanceAPI = (heldKeys,
                            exchangeBalances,
                            exchangeKeys,
@@ -74,7 +75,7 @@ export const binanceAPI = (heldKeys,
         secretKey: exchangeKeys.secret
     };
 
-    let  timeStamp = new Date().getTime()*1000-1000;
+    let timeStamp = new Date().getTime();
     let recvWindow = "20000";
 
     let payload = `timestamp=${timeStamp}&recvWindow=${recvWindow}`;
@@ -171,17 +172,62 @@ const decodeBase64 = input => {
     return output;
 }
 
+
+const kucoinAxiosRequest = (host, endpoint, exchangeKeys, page) => {
+    const APIKey = exchangeKeys.key;
+    const secretKey = exchangeKeys.secret;
+
+    const queryString = `limit=20&page=${page}`
+    const nonce = new Date().getTime();
+    const stringForSign = `${endpoint}/${nonce}/${queryString}`;
+    const signatureStr = base64(stringForSign).replace(/\&$/, stringForSign);
+
+    const signatureResult = CryptoJS.HmacSHA256(
+        signatureStr.replace(/\&$/, ""),
+        secretKey
+    ).toString();
+
+    return axios({
+        url: `${host}${endpoint}?${queryString}`,
+        headers: {
+            "Content-Type": "application/json",
+            "KC-API-KEY": APIKey,
+            "KC-API-NONCE": nonce,
+            "KC-API-SIGNATURE": signatureResult
+        }
+    })
+}
+
+const updateKucoinData = (kucoinBalances, dataList) => {
+    console.log(dataList)
+    for (let i in dataList) {
+
+        const coinBalance = parseFloat(dataList[i].balance);
+        const symbol = dataList[i].coinType;
+
+        if (coinBalance > 0) {
+            kucoinBalances[symbol] = {cur: symbol, bal: coinBalance}
+        }
+    }
+}
+
+
 export const kucoinAPI = (heldKeys,
                           exchangeBalances,
                           exchangeKeys,
                           coinCrossRoads) => {
-    console.log("Kucoin");
+    console.log("KUCOIN");
+
+    const APIKey = exchangeKeys.key;
+    const secretKey = exchangeKeys.secret;
 
     const host = "https://api.kucoin.com";
     const endpoint = "/v1/account/balances";
 
+    const queryString = "limit=20&page=1"
+
     const nonce = new Date().getTime();
-    const stringForSign = `${endpoint}/${nonce}/`;
+    const stringForSign = `${endpoint}/${nonce}/${queryString}`;
 
 
     const signatureStr = base64(stringForSign).replace(/\&$/, stringForSign);
@@ -192,7 +238,7 @@ export const kucoinAPI = (heldKeys,
     ).toString();
 
     axios({
-        url: `${host}${endpoint}`,
+        url: `${host}${endpoint}?${queryString}`,
         headers: {
             "Content-Type": "application/json",
             "KC-API-KEY": APIKey,
@@ -201,14 +247,48 @@ export const kucoinAPI = (heldKeys,
         }
     })
         .then(response => {
-            console.log(response);
+            //console.log(response);
+            if (response.data.data.msg == 'Invalid nonce') {
+                Alert.alert(
+                    "Kucoin Server Error",
+                    "Unable to retrieve Kucoin coins, server may be overloaded",
+                    [{text: "OK", onPress: () => console.log("OK Pressed")}]
+                );
+            }
+            else {
+                let kucoinBalances = {};
+                console.log("FIRST TIME")
+                updateKucoinData(kucoinBalances, response.data.data.datas);
+                promises = []
+                pageNos = response.data.data.pageNos;
 
-            coinCrossRoads(heldKeys, exchangeBalances);
+                curPage = 2;
+                while (curPage <= pageNos) {
+                    promises.push(kucoinAxiosRequest(host, endpoint, exchangeKeys, curPage))
+                    curPage += 1;
+                }
+                axios.all(promises)
+                    .then(axios.spread(function (...args) {
+
+                        for (let i in args) {
+                            let dataList = args[i].data.data.datas;
+                            updateKucoinData(kucoinBalances, dataList)
+                        }
+
+                        exchangeBalances.kucoin = kucoinBalances;
+                        console.log(exchangeBalances);
+                        coinCrossRoads(heldKeys, exchangeBalances);
+                    })).catch(error => {
+                    console.log(error)
+                })
+            }
+
+
         })
         .catch(error => {
             console.log("ERROR");
             console.log(error);
-            if (error.response.data.msg === "API-key format invalid.") {
+            if (error.response.data.msg === "Invalid API Key") {
                 store.delete("kucoin");
 
                 Alert.alert(
@@ -241,7 +321,6 @@ export const cryptopiaAPI = (heldKeys,
     const signature = `${APIKey}POST${encodedURI}${nonce}mZFLkyvTelC5g8XnyQrpOw==`;
     console.log("SIGNATURE");
     console.log(signature);
-
 
     const bufferedSecretKey = secretKey + "=".repeat(4 - secretKey.length % 4)
 

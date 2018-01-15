@@ -12,11 +12,13 @@ import CoinCard from "./CoinCard";
 import AddModal from "./AddModal";
 import EditModal from "./EditModal";
 import store from "react-native-simple-store";
-import {saveAddedCoin, deleteCoin} from "./../Utils/Utils.js";
+import {saveAddedCoin, deleteCoin, getPortfoliotValue} from "./../Utils/Utils.js";
 import {bittrexAPI, binanceAPI, kucoinAPI, cryptopiaAPI} from "./../Utils/ApiUtils.js";
 
 
-const exchanges = ["bittrex", "binance", "kucoin", "cryptopia"];
+// const exchanges = ["bittrex", "binance", "kucoin", "cryptopia"];
+
+const exchanges = ["kucoin"];
 
 class CoinContainer extends Component {
     constructor(props) {
@@ -45,7 +47,6 @@ class CoinContainer extends Component {
     }
 
     componentDidMount() {
-        //this.state.coinFunctions['cryptopia']("", "","",this.coinCrossRoads)
         this.loadAddedCoins();
     }
 
@@ -218,7 +219,9 @@ class CoinContainer extends Component {
             portfolioValue += pricePerCoin * coinBalance;
         });
 
-        portfolioValue = portfolioValue.toFixed(2);
+
+        portfolioValue = getPortfoliotValue(portfolioValue, 2);
+
 
         this.setState({
             myCoins: heldCoins,
@@ -266,7 +269,7 @@ class CoinContainer extends Component {
     }
 
     _addCoin = (coinName, amountToAdd) => {
-        console.log(`ADDING ${amountToAdd} of ${coinName}`);
+        //console.log(`ADDING ${amountToAdd} of ${coinName}`);
         saveAddedCoin(coinName, parseFloat(amountToAdd), this._onRefresh);
     };
 
@@ -276,16 +279,12 @@ class CoinContainer extends Component {
     };
 
     _removeCoin = coinName => {
-        console.log("REMOVE");
-        console.log(coinName);
 
         deleteCoin(coinName, this._onRefresh);
     };
 
     _editCoin = (coinName, newBal) => {
-        console.log("EDIT");
-        console.log(coinName);
-        console.log(newBal);
+
         this._addCoin(coinName, newBal);
     };
 
@@ -354,7 +353,6 @@ class CoinContainer extends Component {
 }
 
 
-
 const styles = {
     contentContainer: {
         // paddingBottom: 45,
@@ -389,11 +387,11 @@ const styles = {
         flex: 1
     },
     header: {
-        display:'flex',
+        display: 'flex',
         fontWeight: "bold",
         fontSize: 30,
         // color:"#05ffa1"
-        color:"#FFFFFF"
+        color: "#FFFFFF"
     }
 };
 
