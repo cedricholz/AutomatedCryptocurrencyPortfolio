@@ -363,9 +363,10 @@ const styles = {
     },
     headerContainer: {
         display: "flex",
-        marginTop: 55,
-        marginBottom: 75,
-        alignItems: "center"
+        marginTop: 30,
+        marginBottom: 0,
+        marginLeft: 50,
+        alignItems: "flex-start"
     },
     modalContainer: {
         display: "flex",
@@ -389,6 +390,7 @@ const styles = {
         flex: 1
     },
     header: {
+        display:'flex',
         fontWeight: "bold",
         fontSize: 30,
         // color:"#05ffa1"
