@@ -54,3 +54,4 @@ buck-out/
 
 
 /android/gradle/wrapper/gradle-wrapper.properties
+/android/gradle.properties

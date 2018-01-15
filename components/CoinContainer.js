@@ -17,8 +17,8 @@ import {bittrexAPI, binanceAPI, kucoinAPI, cryptopiaAPI} from "./../Utils/ApiUti
 
 
 // const exchanges = ["bittrex", "binance", "kucoin", "cryptopia"];
+const exchanges = ["bittrex", "binance", "kucoin"];
 
-const exchanges = ["kucoin"];
 
 class CoinContainer extends Component {
     constructor(props) {
