@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
         // color: "#9B2335",
         // color: "#6e0dd0",
         // color: "#EC25AD",
-        color: "#89023E",
+        color: "#F03A47",
 
         // color:"#3B3355",
 

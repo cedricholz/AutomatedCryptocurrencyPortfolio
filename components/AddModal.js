@@ -82,7 +82,7 @@ class AddModal extends React.Component {
             <View>
                 <View style={styles.buttonContainer}>
                     <View style={styles.buttonBorder}>
-                        <Button onPress={this._showModal} title="  +  " color="#2b9b6c"/>
+                        <Button onPress={this._showModal} title="  +  " color="#077187"/>
                     </View>
                 </View>
                 <TouchableWithoutFeedback onPress={this._hideModal.bind(this)}>

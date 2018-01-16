@@ -12,7 +12,7 @@ import CoinCard from "./CoinCard";
 import AddModal from "./AddModal";
 import EditModal from "./EditModal";
 import store from "react-native-simple-store";
-import {saveAddedCoin, deleteCoin, getPortfoliotValue} from "./../Utils/Utils.js";
+import {saveAddedCoin, deleteCoin, getPortfoliotValue, addCommas} from "./../Utils/Utils.js";
 import {bittrexAPI, binanceAPI, kucoinAPI, cryptopiaAPI} from "./../Utils/ApiUtils.js";
 
 
@@ -54,6 +54,8 @@ class CoinContainer extends Component {
         console.log("LOADING ADDED COINS");
 
         store.get("addedCoins").then(res => {
+
+
             let addedCoinList = [];
             if (res != null) {
                 Object.keys(res.coinData).forEach(key => {
@@ -160,7 +162,7 @@ class CoinContainer extends Component {
             let heldValue = coinData.price_usd * totalNewBal;
 
             heldCoins.dict[symbol].bal = totalNewBal;
-            heldCoins.dict[symbol].heldValue = heldValue.toFixed(2);
+            heldCoins.dict[symbol].heldValue = heldValue;
         } else {
             heldCoins.dict[symbol] = originalData;
             heldCoins.dict[symbol].name = coinData.name;
@@ -169,7 +171,7 @@ class CoinContainer extends Component {
             heldCoins.dict[symbol].percentChange7d = coinData.percent_change_7d;
             heldCoins.dict[symbol].percentChange24h = coinData.percent_change_24h;
             let heldValue = coinData.price_usd * heldCoins.dict[symbol].bal;
-            heldCoins.dict[symbol].heldValue = heldValue.toFixed(2);
+            heldCoins.dict[symbol].heldValue = heldValue;
         }
         heldCoins.dict[symbol].addedBalance = addedBalance;
         return heldCoins;
@@ -261,7 +263,7 @@ class CoinContainer extends Component {
                 percentChange24h={coin.percentChange24h}
                 percentChange7d={coin.percentChange7d}
                 percentChange1h={coin.percentChange1h}
-                heldValue={coin.heldValue}
+                heldValue={addCommas(coin.heldValue)}
                 addedCoinBalance={coin.addedBalance}
                 onCardPressed={this._cardPressed}
             />
