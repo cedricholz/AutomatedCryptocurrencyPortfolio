@@ -29,11 +29,11 @@ class AddModal extends React.Component {
         };
     }
 
-    _openButton = exchangeName => {
+    _openButton = buttonName => {
         for (let i in modalButtons) {
-            if (modalButtons[i] === exchangeName) {
+            if (modalButtons[i] === buttonName) {
                 this.setState({
-                    [modalButtons[i]]: true
+                    [modalButtons[i]]: !this.state[modalButtons[i]]
                 });
             } else {
                 this.setState({
@@ -77,12 +77,16 @@ class AddModal extends React.Component {
             isModalVisible: false
         });
 
+
+
     render() {
         return (
             <View>
                 <View style={styles.buttonContainer}>
-                    <View style={styles.buttonBorder}>
-                        <Button onPress={this._showModal} title="  +  " color="#077187"/>
+                    <View style={styles.addButtonBorder}>
+                        <Button onPress={this._showModal} title="  +  "
+                                color={"#34495E"}
+                                />
                     </View>
                 </View>
                 <TouchableWithoutFeedback onPress={this._hideModal.bind(this)}>
@@ -99,7 +103,8 @@ class AddModal extends React.Component {
                                         <View style={styles.buttonBorder}>
                                             <Button
                                                 title="Add Coin"
-                                                color="#2b9b6c"
+                                                color="#42968e"
+
                                                 onPress={() => {
                                                     this._openButton("isAddCoinVisible");
                                                 }}
@@ -137,7 +142,7 @@ class AddModal extends React.Component {
                                     <View style={styles.modalChoice}>
                                         <ExchangeButton
                                             exchangeName={"binance"}
-                                            color={"#2b9b6c"}
+                                            color={"#42968e"}
                                             refreshCoins={this.props.refreshCoins}
                                             whichExchange={this._openButton}
                                             isOpen={this.state.binance}
@@ -149,7 +154,7 @@ class AddModal extends React.Component {
 
                                         <ExchangeButton
                                             exchangeName={"bittrex"}
-                                            color={"#2b9b6c"}
+                                            color={"#42968e"}
                                             refreshCoins={this.props.refreshCoins}
                                             whichExchange={this._openButton}
                                             isOpen={this.state.bittrex}
@@ -160,7 +165,7 @@ class AddModal extends React.Component {
                                     <View style={styles.modalChoice}>
                                         <ExchangeButton
                                             exchangeName={"kucoin"}
-                                            color={"#2b9b6c"}
+                                            color={"#42968e"}
                                             refreshCoins={this.props.refreshCoins}
                                             whichExchange={this._openButton}
                                             isOpen={this.state.kucoin}
@@ -174,7 +179,7 @@ class AddModal extends React.Component {
                                         <View style={styles.buttonBorder}>
                                             <Button
                                                 title="Close"
-                                                color="#2b9b6c"
+                                                color="#F03A47"
                                                 onPress={this._hideModal}
                                             />
                                         </View>
@@ -199,7 +204,7 @@ const styles = {
     modalChoice: {
         display: "flex",
         marginRight: 10,
-        marginTop: 10,
+        marginTop: 5,
         marginBottom: 10
     },
     addInfoBox: {
@@ -222,13 +227,19 @@ const styles = {
         textAlign: "center"
     },
     buttonBorder: {
-        borderWidth: 5,
-        borderColor: "#FFFFFF"
+        borderWidth: 2,
+        borderColor:"#FFFFFF"
+        // borderColor: "#42968e"
+    },
+    addButtonBorder:{
+        borderWidth: 2,
+        borderColor:"#42968e"
     },
     buttonContainer: {
         display: "flex",
         alignItems: "flex-end",
         marginRight: 20,
+        height: 40,
 
     }
 };

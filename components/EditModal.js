@@ -36,7 +36,7 @@ class EditModal extends React.Component {
             <View>
                 <Modal style={styles.modalContainer} isVisible={true}>
                     <View style={styles.modalContainer}>
-                        <ScrollView style={styles.modalScrollView}>
+                        <View>
                             <View style={styles.modalChoice}>
                                 <View style={styles.addInfoBox}>
                                     <Text style={styles.symbolText}>{this.props.symbol}</Text>
@@ -51,41 +51,41 @@ class EditModal extends React.Component {
                                         }
                                     />
                                 </View>
-                                <View style={styles.twoButtons}>
-                                    <View style={styles.buttonBorder}>
-                                    <Button
-                                        style={styles.buttonContainer}
-                                        title="Remove Coin"
-                                        color="#6e0dd0"
-                                        onPress={() => {
+
+                                <View style={styles.both}>
+                                    <View style={styles.individual}>
+                                        <Button title="Remove Coin" color="#077187" onPress={() => {
                                             this._removeCoin(this.props.symbol);
-                                        }}
-                                    />
+                                        }}/>
                                     </View>
-                                    <View style={styles.buttonBorder}>
-                                    <Button
-                                        style={styles.buttonContainer}
-                                        title="Submit Edit"
-                                        color="#2A9D8F"
-                                        onPress={() => {
+                                    <View style={styles.individual}>
+                                        <Button style={styles.individual} color="#2b9b6c" title="Submit Edit" onPress={() => {
                                             this._editCoin(this.props.symbol, parseFloat(this.state.coinAmountBought));
-                                        }}
-                                    />
+                                        }}/>
                                     </View>
                                 </View>
+
+
                                 <View style={styles.cancelButton}>
                                     <View style={styles.buttonBorder}>
-                                    <Button
-                                        style={styles.buttonContainer}
-                                        title="Cancel"
-                                        color="#2b9b6c"
-                                        onPress={this.props.close}
-                                    />
+                                        <Button
+                                            style={styles.buttonContainer}
+                                            title="Cancel"
+                                            // color="#2b9b6c"
+                                            color="#F03A47"
+                                            onPress={this.props.close}
+                                        />
                                     </View>
                                 </View>
+                                <View>
+                                </View>
+
                             </View>
-                        </ScrollView>
+
+                        </View>
+
                     </View>
+
                 </Modal>
             </View>
         );
@@ -97,6 +97,20 @@ const styles = {
         display: "flex",
         marginRight: 30,
         marginLeft: 30
+    },
+    both: {
+        display: "flex",
+        flexDirection: 'row',
+        // justifyContent:'space-around',
+        // alignItems:'center',
+        justifyContent: 'center',
+        justifyContent: 'space-between'
+
+    },
+    individual: {
+        width: "50%",
+        borderWidth: 2,
+        borderColor: "#FFFFFF"
     },
     modalScrollView: {},
     modalChoice: {
@@ -127,21 +141,25 @@ const styles = {
         textAlign: "center"
     },
     cancelButton: {
-        marginLeft: 50,
-        marginRight: 50
-    },
-    buttonBorder: {
-        borderWidth: 5,
+        marginTop:5,
+        borderWidth: 2,
         borderColor: "#FFFFFF"
     },
+    buttonBorder: {
+        // borderWidth: 5,
+        // borderColor: "#FFFFFF"
+    },
     twoButtons: {
-        flex: 1,
+        display: "flex",
+        // flex: 1,
         flexDirection: "row",
-        justifyContent: "space-around",
-        margin: 10
+        // width:"100%",
+        // justifyContent: "space-around",
+        // margin: 10
     },
     buttonContainer: {
-        display: "flex"
+        display: "flex",
+
     }
 };
 

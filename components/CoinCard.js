@@ -27,7 +27,7 @@ const CoinCard = ({
                     <Text style={coinSymbol}>{symbol}</Text>
                     <Text style={seperator}>|</Text>
                     {balance > 0 && <Text style={bal}>{balance}</Text>}
-                    <Text style={coinName}>{name}</Text>
+                    <Text style={coinName} >{name}</Text>
                     <Text style={usd}>(${priceUSD})</Text>
                     {balance > 0 && (
                         <Text style={coinPrice}>
@@ -81,26 +81,31 @@ const CoinCard = ({
 
 
 // const coinColor = "#395E66";
-const coinColor = "#ffffff";
-
-
+const coinColor = "#a1b5c4";
+const myFont = "serif";
+const percentSize = 14;
+const letterSize = 14;
 
 const styles = StyleSheet.create({
     container: {
         display: "flex",
-        marginBottom: 10,
-        borderBottomColor: "#e5e5e5",
-        borderBottomWidth: 3,
-        padding: 10
+        marginBottom: 5,
+        borderTopColor: "#e5e5e5",
+        borderTopWidth: 2,
+        padding: 10,
+        // borderWidth: 1,
+        borderColor:"#FFFFFF"
     },
     upperRow: {
         display: "flex",
         flexDirection: "row",
-        marginBottom: 15
+        marginBottom: 15,
+
     },
     timeText:{
         //color:"#253145"
-        color: `${coinColor}`
+        color: `${coinColor}`,
+        fontSize: letterSize,
     },
     coinSymbol: {
         marginTop: 10,
@@ -108,21 +113,31 @@ const styles = StyleSheet.create({
         marginRight: 5,
         // color: "#264653",
         fontWeight: "bold",
+        color:"#FFFFFF",
         // color:"#b967ff"
-        // color:"#253145",
-        color: `${coinColor}`,
+        // color:"#5D6D7E",
+        // color: `${coinColor}`,
+        fontSize: letterSize,
+
     },
     coinName: {
         marginTop: 10,
         marginLeft: 5,
         marginRight: 0,
-        color: `${coinColor}`,
+        // color: `${coinColor}`,
+        //fontWeight:"bold"
+        // color:"#E5E7E9"
+        color:"#FFFFFF",
+        fontSize: letterSize,
+
     },
     bal: {
         marginTop: 10,
         marginLeft: 5,
         marginRight: 0,
-        color: `${coinColor}`,
+        //color: `${coinColor}`,
+        color:"#a1b5c4",
+        fontSize: letterSize,
     },
     usd: {
         marginTop: 10,
@@ -130,21 +145,30 @@ const styles = StyleSheet.create({
         marginRight: 0,
         // color: "#E9C46A",
         // color:"#fffb96"
-        color: `${coinColor}`,
+        // color: `${coinColor}`,
+        color:"#a1b5c4",
+        fontSize: letterSize,
+
+
     },
     heldValue: {
         marginTop: 10,
         marginLeft: 5,
         marginRight: 5,
-        color: `${coinColor}`,
+        // color: `${coinColor}`,
         // color:"#253145"
+        fontSize: letterSize,
+
     },
     seperator: {
         marginTop: 10,
-        color:"#FFFFFF"
+        color:"#FFFFFF",
+        fontSize: letterSize,
+
     },
     moneySymbol: {
-        fontWeight: "bold"
+        fontWeight: "bold",
+        fontSize: letterSize,
     },
     coinPrice: {
         marginTop: 10,
@@ -153,6 +177,8 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         // color:"#01cdfe",
         color:"#FFFFFF",
+        fontSize: letterSize,
+
     },
     statisticsContainer: {
         display: "flex",
@@ -170,23 +196,34 @@ const styles = StyleSheet.create({
         // color:"#83f52c",
         color:"#44CF6C",
 
+        fontSize: percentSize,
+
+
+
 
         // color:"#008080",
         fontWeight: "bold",
-        marginLeft: 5
+        marginLeft: 5,
+
     },
     percentChangeMinus: {
         // color: "#9B2335",
         // color: "#6e0dd0",
         // color: "#EC25AD",
-        color: "#F03A47",
-
+        //
+        // color: "#F03A47",
+        color: "#cf4d44",
+        //
         // color:"#3B3355",
 
-        // color:"#873D48",
+        //color:"#873D48",
 
         fontWeight: "bold",
-        marginLeft: 5
+        marginLeft: 5,
+
+        fontSize: percentSize,
+
+
     }
 });
 

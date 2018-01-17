@@ -34,6 +34,9 @@ class CoinContainer extends Component {
             editBalance: 0,
             exchangeBalances: {},
             coinMarketCapDict: "",
+            percentChange1h: 0,
+            percentChange24h: 0,
+            percentChange7d: 0,
             myCoins: {
                 dict: {}
             },
@@ -42,7 +45,8 @@ class CoinContainer extends Component {
                 binance: binanceAPI,
                 kucoin: kucoinAPI,
                 cryptopia: cryptopiaAPI
-            }
+            },
+
         };
     }
 
@@ -159,18 +163,18 @@ class CoinContainer extends Component {
             let oldBal = heldCoins.dict[symbol].bal;
             let totalNewBal = newBal + oldBal;
 
-            let heldValue = coinData.price_usd * totalNewBal;
+            let heldValue = parseFloat(coinData.price_usd) * totalNewBal;
 
             heldCoins.dict[symbol].bal = totalNewBal;
             heldCoins.dict[symbol].heldValue = heldValue;
         } else {
             heldCoins.dict[symbol] = originalData;
             heldCoins.dict[symbol].name = coinData.name;
-            heldCoins.dict[symbol].priceUSD = coinData.price_usd;
+            heldCoins.dict[symbol].priceUSD = parseFloat(coinData.price_usd);
             heldCoins.dict[symbol].percentChange1h = coinData.percent_change_1h;
             heldCoins.dict[symbol].percentChange7d = coinData.percent_change_7d;
             heldCoins.dict[symbol].percentChange24h = coinData.percent_change_24h;
-            let heldValue = coinData.price_usd * heldCoins.dict[symbol].bal;
+            let heldValue = parseFloat(coinData.price_usd) * heldCoins.dict[symbol].bal;
             heldCoins.dict[symbol].heldValue = heldValue;
         }
         heldCoins.dict[symbol].addedBalance = addedBalance;
@@ -211,6 +215,7 @@ class CoinContainer extends Component {
         this.calculateTotalValue(heldCoins);
     };
 
+
     calculateTotalValue = heldCoins => {
         let portfolioValue = 0;
 
@@ -221,6 +226,7 @@ class CoinContainer extends Component {
             portfolioValue += pricePerCoin * coinBalance;
         });
 
+        this.calculateTotalPercentchange(heldCoins, portfolioValue);
 
         portfolioValue = getPortfoliotValue(portfolioValue, 2);
 
@@ -231,7 +237,67 @@ class CoinContainer extends Component {
             refreshing: false,
             isLoading: false
         });
+
+
     };
+
+    calculateTotalPercentchange = (heldCoins, portfolioValue) => {
+        let prev1hTotal = 0;
+        let prev24hTotal = 0;
+        let prev7dTotal = 0;
+
+
+        Object.keys(heldCoins.dict).forEach(key => {
+            const change1h = parseFloat(heldCoins.dict[key].percentChange1h);
+            const change24h = parseFloat(heldCoins.dict[key].percentChange24h);
+            const change7d = parseFloat(heldCoins.dict[key].percentChange7d);
+
+            const priceUSD = heldCoins.dict[key].priceUSD;
+
+            const coinBalance = heldCoins.dict[key].bal;
+
+            const prevVal1h = this.getPrevPrice(priceUSD, change1h) * coinBalance;
+
+            const prevVal24h = this.getPrevPrice(priceUSD, change24h) * coinBalance;
+
+            const prevVal7d = this.getPrevPrice(priceUSD, change7d) * coinBalance;
+
+            prev1hTotal += prevVal1h;
+            prev24hTotal += prevVal24h;
+            prev7dTotal += prevVal7d;
+
+
+        });
+
+
+        this.setState({
+            percentChange1h: this.getPercentChange(prev1hTotal, portfolioValue),
+            percentChange24h: this.getPercentChange(prev24hTotal, portfolioValue),
+            percentChange7d: this.getPercentChange(prev7dTotal, portfolioValue)
+        });
+
+
+    };
+
+    getPercentChange = (prevPrice, newPrice) => {
+        if (newPrice > prevPrice) {
+            return 100 * (newPrice - prevPrice) / prevPrice;
+        }
+        else {
+            return -100 * (prevPrice - newPrice) / prevPrice;
+        }
+    };
+
+
+    getPrevPrice = (newPrice, percentChange) => {
+        if (percentChange === 0) {
+            return newPrice;
+        }
+        if (percentChange < 0) {
+            return newPrice * -1 / (-1 * percentChange / 100 - 1);
+        }
+        return newPrice / (percentChange / 100 + 1)
+    }
 
     _cardPressed = (symbol, balance) => {
         console.log("CARD PRESSED");
@@ -259,7 +325,7 @@ class CoinContainer extends Component {
                 symbol={coin.cur}
                 name={coin.name}
                 balance={coin.bal}
-                priceUSD={coin.priceUSD}
+                priceUSD={addCommas(coin.priceUSD)}
                 percentChange24h={coin.percentChange24h}
                 percentChange7d={coin.percentChange7d}
                 percentChange1h={coin.percentChange1h}
@@ -271,7 +337,6 @@ class CoinContainer extends Component {
     }
 
     _addCoin = (coinName, amountToAdd) => {
-        //console.log(`ADDING ${amountToAdd} of ${coinName}`);
         saveAddedCoin(coinName, parseFloat(amountToAdd), this._onRefresh);
     };
 
@@ -310,7 +375,7 @@ class CoinContainer extends Component {
                     <Spinner
                         visible={this.state.isLoading}
                         textContent={"Loading"}
-                        textStyle={{color: "#253145"}}
+                        textStyle={{color: "#a1b5c4"}}
                         animation="fade"
                     />
                 </View>
@@ -323,6 +388,45 @@ class CoinContainer extends Component {
                     <Text style={header}>${this.state.portValue}</Text>
                 </View>
 
+                <View style={styles.statisticsContainer}>
+                    <Text style={styles.timeText}>
+                        1h:
+                        <Text
+                            style={
+                                this.state.percentChange1h < 0 ? styles.percentChangeMinus : styles.percentChangePlus
+                            }
+                        >
+                            {" "}
+                            {this.state.percentChange1h.toFixed(2)} %{" "}
+                        </Text>
+                    </Text>
+
+                    <Text style={styles.timeText}>
+                        24h:
+                        <Text
+                            style={
+                                this.state.percentChange24h < 0 ? styles.percentChangeMinus : styles.percentChangePlus
+                            }
+                        >
+                            {" "}
+                            {this.state.percentChange24h.toFixed(2)} %{" "}
+                        </Text>
+                    </Text>
+
+                    <Text style={styles.timeText}>
+                        7d:
+                        <Text
+                            style={
+                                this.state.percentChange7d < 0 ? styles.percentChangeMinus : styles.percentChangePlus
+                            }
+                        >
+                            {" "}
+                            {this.state.percentChange7d.toFixed(2)} %{" "}
+                        </Text>
+                    </Text>
+
+                </View>
+
                 {this.state.editModalIsVisible && (
                     <EditModal
                         symbol={this.state.editSymbol}
@@ -333,11 +437,7 @@ class CoinContainer extends Component {
                     />
                 )}
 
-                <AddModal
-                    coinDict={this.state.coinMarketCapDict}
-                    addCoin={this._addCoin}
-                    refreshCoins={this._onRefresh}
-                />
+
                 <ScrollView
                     style={coinScroll}
                     refreshControl={
@@ -349,38 +449,62 @@ class CoinContainer extends Component {
                 >
                     {this.renderCoinCards()}
                 </ScrollView>
+
+                <View style = {styles.modalButton}>
+                    <AddModal
+                        coinDict={this.state.coinMarketCapDict}
+                        addCoin={this._addCoin}
+                        refreshCoins={this._onRefresh}
+                    />
+                </View>
             </View>
         );
     }
 }
 
+const coinColor = "#a1b5c4";
+const percentSize = 18;
 
 const styles = {
     contentContainer: {
-        // paddingBottom: 45,
-        // paddingTop: 50
-        flex: 1
+        flex: 1,
+    },
+    modalButton:{
+        position: 'absolute',
+
+        width: 410,
+        height: 390,
+        top: 590,
     },
     headerContainer: {
-        // display: "flex",
-        marginTop: 20,
-        marginLeft: 20,
-        // alignItems: "flex-start"
+        marginTop: 30,
+        marginLeft: 15,
     },
     modalContainer: {
         display: "flex",
         marginRight: 30,
         marginLeft: 30
     },
+    statisticsContainer: {
+        display: "flex",
+        padding: 10,
+        paddingBottom: 30,
+        flexDirection: "row",
+        justifyContent: "space-around",
+    },
     coinScroll: {
         flex: 1,
-        marginTop: 5
+        marginTop: 15,
     },
     modalChoice: {
         display: "flex",
         marginRight: 10,
         marginTop: 10,
         marginBottom: 10
+    },
+    timeText: {
+        color: `${coinColor}`,
+        fontSize: percentSize,
     },
     buttonContainer: {
         display: "flex",
@@ -392,8 +516,27 @@ const styles = {
         display: 'flex',
         fontWeight: "bold",
         fontSize: 30,
-        // color:"#05ffa1"
         color: "#FFFFFF"
+    },
+    percentChangePlus: {
+        color: "#44CF6C",
+
+        fontSize: percentSize,
+
+        fontWeight: "bold",
+        marginLeft: 5,
+
+    },
+    percentChangeMinus: {
+
+        color: "#cf4d44",
+
+        fontWeight: "bold",
+        marginLeft: 5,
+
+        fontSize: percentSize,
+
+
     }
 };
 

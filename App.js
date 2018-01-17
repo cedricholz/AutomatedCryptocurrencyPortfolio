@@ -20,8 +20,11 @@ const styles = StyleSheet.create({
         // alignItems: "center",
         // backgroundColor: "#2f3f47",
         // backgroundColor: "#2b9b6c",
-        backgroundColor: "#263238",
-        
+
+
+        // backgroundColor: "#263238",
+        backgroundColor: "#34495E",
+
         // backgroundColor: "#05ffa1"
     },
 });

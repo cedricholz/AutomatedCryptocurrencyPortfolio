@@ -100,7 +100,7 @@ const styles = {
         marginRight: 20
     },
     buttonBorder: {
-        borderWidth: 5,
+        borderWidth: 2,
         borderColor: "#FFFFFF"
     },
 };
