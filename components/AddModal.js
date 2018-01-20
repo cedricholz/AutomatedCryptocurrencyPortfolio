@@ -86,6 +86,7 @@ class AddModal extends React.Component {
                     <View style={styles.addButtonBorder}>
                         <Button onPress={this._showModal} title="  +  "
                                 color={"#34495E"}
+
                                 />
                     </View>
                 </View>

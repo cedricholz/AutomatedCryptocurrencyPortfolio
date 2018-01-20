@@ -12,7 +12,7 @@ import CoinCard from "./CoinCard";
 import AddModal from "./AddModal";
 import EditModal from "./EditModal";
 import store from "react-native-simple-store";
-import {saveAddedCoin, deleteCoin, getPortfoliotValue, addCommas} from "./../Utils/Utils.js";
+import {saveAddedCoin, deleteCoin, getPortfolioValue, formatPrice, getFormattedCoinPrice} from "./../Utils/Utils.js";
 import {bittrexAPI, binanceAPI, kucoinAPI, cryptopiaAPI} from "./../Utils/ApiUtils.js";
 
 
@@ -228,7 +228,7 @@ class CoinContainer extends Component {
 
         this.calculateTotalPercentchange(heldCoins, portfolioValue);
 
-        portfolioValue = getPortfoliotValue(portfolioValue, 2);
+        portfolioValue = getPortfolioValue(portfolioValue, 2);
 
 
         this.setState({
@@ -269,7 +269,6 @@ class CoinContainer extends Component {
 
         });
 
-
         this.setState({
             percentChange1h: this.getPercentChange(prev1hTotal, portfolioValue),
             percentChange24h: this.getPercentChange(prev24hTotal, portfolioValue),
@@ -280,12 +279,15 @@ class CoinContainer extends Component {
     };
 
     getPercentChange = (prevPrice, newPrice) => {
-        if (newPrice > prevPrice) {
-            return 100 * (newPrice - prevPrice) / prevPrice;
+        if (prevPrice > 0) {
+            if (newPrice > prevPrice) {
+                return 100 * (newPrice - prevPrice) / prevPrice;
+            }
+            else {
+                return -100 * (prevPrice - newPrice) / prevPrice;
+            }
         }
-        else {
-            return -100 * (prevPrice - newPrice) / prevPrice;
-        }
+        return 0;
     };
 
 
@@ -325,11 +327,11 @@ class CoinContainer extends Component {
                 symbol={coin.cur}
                 name={coin.name}
                 balance={coin.bal}
-                priceUSD={addCommas(coin.priceUSD)}
+                priceUSD={formatPrice(coin.priceUSD)}
                 percentChange24h={coin.percentChange24h}
                 percentChange7d={coin.percentChange7d}
                 percentChange1h={coin.percentChange1h}
-                heldValue={addCommas(coin.heldValue)}
+                heldValue={formatPrice(coin.heldValue)}
                 addedCoinBalance={coin.addedBalance}
                 onCardPressed={this._cardPressed}
             />
@@ -450,7 +452,7 @@ class CoinContainer extends Component {
                     {this.renderCoinCards()}
                 </ScrollView>
 
-                <View style = {styles.modalButton}>
+                <View style={styles.modalButton}>
                     <AddModal
                         coinDict={this.state.coinMarketCapDict}
                         addCoin={this._addCoin}
@@ -469,7 +471,7 @@ const styles = {
     contentContainer: {
         flex: 1,
     },
-    modalButton:{
+    modalButton: {
         position: 'absolute',
 
         width: 410,

@@ -61,27 +61,35 @@ export const deleteCoin = (currency, refreshCoins) => {
 };
 
 
-export const addCommas = (num) => {
-    num = num.toFixed(2).toString();
-    let returnString = num.substring(num.length - 3);
+export const formatPrice = (num) => {
 
-    count = 1;
-    for (let i = num.length - 4; i >= 0; i--) {
-        returnString = num.charAt(i) + returnString;
-        if (count % 3 == 0 && i != 0) {
-            returnString = "," + returnString
+    if (num > .1) {
+        num = num.toFixed(2).toString();
+        let returnString = num.substring(num.length - 3);
+
+        count = 1;
+        for (let i = num.length - 4; i >= 0; i--) {
+            returnString = num.charAt(i) + returnString;
+            if (count % 3 == 0 && i != 0) {
+                returnString = "," + returnString
+            }
+            count += 1;
         }
-        count += 1;
+        return returnString;
     }
-    return returnString;
+    else{
+        console.log(num)
+        //return num.toFixed(10).toString();
+       return parseFloat(num.toFixed(10)).toString()
+    }
 }
 
 
-export const getPortfoliotValue = (num, digits) => {
+export const getPortfolioValue = (num, digits) => {
     if (num < 100000) {
         //let toFixed = num.toFixed(digits).toString();
 
-        return addCommas(num);
+        return formatPrice(num);
     }
     var si = [
         {value: 1, symbol: ""},
